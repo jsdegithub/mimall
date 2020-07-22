@@ -7,9 +7,16 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
+  mounted() {
+    let url='/api/activity/servicetime';
+    axios.get(url).then(()=>{
+      console.log("ok");
+    })
+  },
   components: {
     HelloWorld
   }
