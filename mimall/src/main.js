@@ -9,7 +9,12 @@ import App from './App.vue'
 Vue.use(VueAxios, axios);
 Vue.config.productionTip = false
 
-// axios.defaults.baseURL='/api';
+const mock=true;
+if(mock){
+  require('./mock/api.js');
+}
+
+axios.defaults.baseURL='/api';
 axios.defaults.timeout=8000;
 // axios.defaults.baseURL=env.baseURL;
 
