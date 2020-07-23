@@ -25,6 +25,7 @@ export default {
     clear(key, module_name){
         let obj=this.getStorage();
         if(module_name){
+            if(!obj[module_name]) return;
             delete obj[module_name][key];
         }else{
             delete obj[key];
