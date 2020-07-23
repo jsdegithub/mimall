@@ -4,8 +4,8 @@ Mock.mock('/api/user/login', {
     "data": {
         "id|198100-198199": 0,
         "username": "@cname",
-        "email": "admin@51purse.com",
-        "phone": null,
+        "email": "@email",
+        "phone": /^1[3456789]\d{9}$/,
         "role": 0,
         "createTime": 1479048325000,
         "updateTime": 1479048325000
