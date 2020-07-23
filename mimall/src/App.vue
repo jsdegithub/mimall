@@ -5,8 +5,12 @@
 </template>
 
 <script>
+import storage from './storage/index.js'
 export default {
-
+  mounted(){
+    // storage.setItem('a', 1);
+    // storage.clear('a', 'user');
+  }
 }
 </script>
 
@@ -20,3 +24,4 @@ export default {
   margin-top: 60px;
 }
 </style>
+
