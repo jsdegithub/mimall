@@ -7,9 +7,15 @@
 <script>
 import storage from './storage/index.js'
 export default {
+  data() {
+    return {
+      res:{}
+    }
+  },
   mounted(){
-    // storage.setItem('a', 1);
-    // storage.clear('a', 'user');
+    this.axios.get('/mock/user/login.json').then(res => {
+      this.res=res;
+    });
   }
 }
 </script>
