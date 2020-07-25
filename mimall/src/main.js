@@ -14,8 +14,8 @@ if(mock){
   require('./mock/api.js');
 }
 
-axios.defaults.baseURL='https://www.easy-mock.com/mock/5f19d125e90b07073a7cce17/mimall';
-// axios.defaults.baseURL='/api';
+// axios.defaults.baseURL='https://www.easy-mock.com/mock/5f19d125e90b07073a7cce17/mimall';
+axios.defaults.baseURL='/api';
 axios.defaults.timeout=8000;
 // axios.defaults.baseURL=env.baseURL;
 
