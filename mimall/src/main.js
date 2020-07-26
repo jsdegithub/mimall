@@ -2,11 +2,15 @@ import Vue from 'vue'
 import router from './router.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueLazyLoad from 'vue-lazyload'
 
 import App from './App.vue'
 // import env from './env.js'
 
 Vue.use(VueAxios, axios);
+Vue.use(VueLazyLoad, {
+  loading: '/imgs/loading-svg/loading-bars.svg'
+})
 Vue.config.productionTip = false
 
 const mock=false;
