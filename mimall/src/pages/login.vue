@@ -66,6 +66,10 @@ export default {
                 })
                 .then((res) => {
                     this.$cookie.set("userId", res.id, { expires: "1M" });
+                    this.$store.dispatch("saveUserName", res.username);
+                    this.axios.get("/carts/products/sum").then((res) => {
+                        this.$store.dispatch("saveCartCount", res);
+                    });
                     this.$router.push("/index");
                 })
                 .catch((_) => {
