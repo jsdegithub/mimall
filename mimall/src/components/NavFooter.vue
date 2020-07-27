@@ -15,7 +15,7 @@
         </div>
         <div class="copyright">
             Copyright ©2020
-            <a href="http://mi.futurefe.com/#/index"><span class="domain">mi.futurefe.com</span></a> All Rights Reserved.
+            <a href="javascript:;"><span class="domain">mi.futurefe.com</span></a> All Rights Reserved.
         </div>
     </div>
 </template>
