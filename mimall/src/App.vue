@@ -14,8 +14,10 @@ export default {
         };
     },
     mounted() {
-        this.getUser();
-        this.getCartCount();
+        if (this.$cookie.get("userId")) {
+            this.getUser();
+            this.getCartCount();
+        }
     },
     methods: {
         getUser() {
@@ -29,11 +31,14 @@ export default {
                 });
         },
         getCartCount() {
-            this.axios.get("/carts/products/sum").then((res = 0) => {
-                this.$store.dispatch("saveCartCount", res);
-            }).catch((res=0) => {
-                this.$store.dispatch("saveCartCount", res);
-            })
+            this.axios
+                .get("/carts/products/sum")
+                .then((res = 0) => {
+                    this.$store.dispatch("saveCartCount", res);
+                })
+                .catch((res = 0) => {
+                    this.$store.dispatch("saveCartCount", res);
+                });
         },
     },
 };
