@@ -133,7 +133,7 @@ export default {
                     this.$router.push("/cart");
                 })
                 .catch((_) => {
-                    alert("未登录");
+                    this.$message.error("未登录");
                 });
         },
     },

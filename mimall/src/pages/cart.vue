@@ -100,13 +100,13 @@ export default {
                 selected = item.productSelected;
             if (type == "-") {
                 if (quantity == 1) {
-                    alert("不能再减了");
+                    this.$message.warning("不能再减了");
                     return;
                 }
                 quantity--;
             } else if (type == "+") {
                 if (quantity > item.productStock) {
-                    alert("库存不足");
+                    this.$message.warning("库存不足");
                     return;
                 }
                 quantity++;
@@ -124,13 +124,14 @@ export default {
         },
         delProduct(item) {
             this.axios.delete(`/carts/${item.productId}`).then((res) => {
+                this.$message.success("删除成功");
                 this.renderData(res);
             });
         },
         order() {
             let isCheck = this.list.every((item) => !item.productSelected);
             if (isCheck) {
-                alert("请至少选择一件商品");
+                this.$message.warning("请至少选择一件商品");
             } else {
                 this.$router.push("/order/confirm");
             }

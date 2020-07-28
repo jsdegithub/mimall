@@ -73,7 +73,7 @@ export default {
                     this.$router.push("/index");
                 })
                 .catch((_) => {
-                    alert("用户名或密码错误");
+                    this.$message.error("用户名或密码错误");
                 });
         },
         register() {
@@ -84,7 +84,7 @@ export default {
                     email: "jinshuo@163.com",
                 })
                 .then((_) => {
-                    alert("注册成功");
+                    this.$message.success("注册成功");
                 });
         },
     },
