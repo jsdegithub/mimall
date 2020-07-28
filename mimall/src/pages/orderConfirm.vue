@@ -55,7 +55,7 @@
                                     class="street"
                                 >{{item.receiverProvince+''+item.receiverCity+''+item.receiverDistrict+''+item.receiverAddress}}</div>
                                 <div class="action">
-                                    <a href="javascript:;" class="fl">
+                                    <a href="javascript:;" class="fl" @click="delAddress(item)">
                                         <svg class="icon icon-del">
                                             <use xlink:href="#icon-del" />
                                         </svg>
@@ -124,9 +124,15 @@
                 </div>
             </div>
         </div>
+        <modal title="删除确认" btnType="1" :showModal="showDelModal" @cancel="showDelModal=false" @submit="submitAddress">
+            <template v-slot:body>
+                <p>您确认要删除此地址吗</p>
+            </template>
+        </modal>
     </div>
 </template>
 <script>
+import Modal from '../components/Modal'
 export default {
     data() {
         return {
@@ -134,7 +140,13 @@ export default {
             cartList: [], //购物车中需要结算的商品列表
             cartTotalPrice: 0,
             count: 0,
+            checkedItem: {},
+            userAction: '',
+            showDelModal: false
         };
+    },
+    components:{
+        Modal
     },
     mounted() {
         this.getAddressList();
@@ -145,6 +157,35 @@ export default {
             this.axios.get("/shippings").then((res) => {
                 this.list = res.list;
             });
+        },
+        delAddress(item){
+            this.checkedItem=item;
+            this.userAction=2;
+            this.showDelModal=true;
+        },
+        submitAddress(){
+            let {checkedItem, userAction}=this;
+            let method, url;
+            if(userAction==0){
+                method='post';
+                url='/shippings';
+            }else if(userAction==1){
+                method='put';
+                url=`/shippings/${checkedItem.id}`;
+            }else{
+                method='delete';
+                url=`/shippings/${checkedItem.id}`;
+            }
+            this.axios[method](url).then(res => {
+                this.closeModal();
+                this.getAddressList();
+                this.$message.success("操作成功");
+            })
+        },
+        closeModal(){
+            this.checkedItem={};
+            this.userAction='';
+            this.showDelModal=false;
         },
         getCartList() {
             this.axios.get("/carts").then((res) => {
