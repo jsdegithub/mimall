@@ -223,16 +223,16 @@ export default {
                     ];
                 });
         },
-        addCart(){
-            this.showModal=true;
-            /* this.axios.post('/carts',{
+        addCart(id){
+            this.axios.post('/carts',{
                 productId: id,
                 selected: true
-            }).then(()=>{
-
-            }).catch(()=>{
+            }).then((res)=>{
                 this.showModal=true;
-            }) */
+                this.$store.dispatch('saveCartCount', res.cartTotalQuantity);
+            }).catch(()=>{
+                alert('未登录');
+            })
         },
         goToCart(){
             this.$router.push('/cart');
