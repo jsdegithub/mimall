@@ -55,15 +55,30 @@
                             </div>
                         </div>
                     </div>
-                    <el-pagination
+                    <!-- <el-pagination
                         class="pagination"
                         background
                         layout="prev, pager, next"
                         :pageSize="pageSize"
                         :total="total"
                         @current-change="handleChange"
-                    ></el-pagination>
+                    ></el-pagination>-->
+                    <div
+                        class="scroll-more"
+                        v-infinite-scroll="scrollMore"
+                        infinite-scroll-disabled="busy"
+                        infinite-scroll-distance="410"
+                    >
+                        <img
+                            src="/imgs/loading-svg/loading-bars.svg"
+                            v-show="scrollLoading==true && loading==false"
+                            alt
+                        />
+                    </div>
                     <no-data v-if="!loading && list.length==0"></no-data>
+                    <div class="no-more" v-show="!hasNextPage">
+                        <p>没有更多了</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,6 +89,7 @@ import OrderHeader from "./../components/OrderHeader";
 import Loading from "./../components/Loading";
 import NoData from "./../components/NoData";
 import { Pagination } from "element-ui";
+import infiniteScroll from "vue-infinite-scroll";
 export default {
     name: "order-list",
     components: {
@@ -82,13 +98,19 @@ export default {
         NoData,
         [Pagination.name]: Pagination,
     },
+    directives: {
+        infiniteScroll,
+    },
     data() {
         return {
+            scrollLoading: false,
             list: [],
             loading: true,
             pageSize: 5,
             pageNum: 1,
             total: 0,
+            busy: false,
+            hasNextPage: true
         };
     },
     mounted() {
@@ -96,17 +118,19 @@ export default {
     },
     methods: {
         getOrderList() {
+            this.busy=true;  //防止vue-infinite-scroll在页面刚渲染时就加载下一页
             this.axios
                 .get("/orders", {
                     params: {
                         pageNum: this.pageNum,
-                        pageSize: this.pageSize
-                    }
+                        pageSize: this.pageSize,
+                    },
                 })
                 .then((res) => {
                     this.loading = false;
                     this.list = res.list;
-                    this.total=res.total;
+                    this.total = res.total;
+                    this.busy=false;  //在页面渲染完成后才使vue-infinite-scroll生效
                 })
                 .catch((_) => {
                     this.loading = false;
@@ -121,10 +145,40 @@ export default {
                 },
             });
         },
-        handleChange(pageNum){
-            this.pageNum=pageNum;
+        handleChange(pageNum) {
+            this.pageNum = pageNum;
             this.getOrderList();
-        }
+        },
+        scrollMore() {
+            this.busy = true;
+            setTimeout(() => {
+                this.pageNum++;
+                this.getList();
+            }, 500);
+        },
+        getList() {
+            this.scrollLoading = true;
+            this.axios
+                .get("/orders", {
+                    params: {
+                        pageNum: this.pageNum,
+                        pageSize: this.pageSize,
+                    },
+                })
+                .then((res) => {
+                    this.list = this.list.concat(res.list);
+                    this.scrollLoading = false;
+                    if (res.hasNextPage) {
+                        this.busy = false;
+                    } else {
+                        this.hasNextPage=false;
+                        this.busy = true;
+                    }
+                })
+                .catch((_) => {
+                    this.$message.error("出错了，请稍后再试。");
+                });
+        },
     },
 };
 </script>
@@ -203,6 +257,15 @@ export default {
             .load-more,
             .scroll-more {
                 text-align: center;
+                img{
+                    height: 60px;
+                    width: 97px;
+                }
+            }
+            .no-more{
+                text-align: center;
+                color: #999999;
+                font-size: 18px;
             }
         }
     }
