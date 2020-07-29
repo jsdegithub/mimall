@@ -45,6 +45,12 @@ axios.interceptors.response.use(function (response) {
   } else {
     return Promise.reject(res);
   }
+}, (error) => {
+  let res = error.response;
+  // console.log(res);
+  if (res.data.status == 500) {
+    return Promise.reject();
+  }
 });
 
 new Vue({

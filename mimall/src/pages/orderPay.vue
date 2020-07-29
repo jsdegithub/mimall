@@ -1,5 +1,10 @@
 <template>
     <div class="order-pay">
+        <order-header title="订单支付">
+            <template v-slot:tip>
+                <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
+            </template>
+        </order-header>
         <div class="wrapper">
             <div class="container">
                 <div class="order-wrap">
@@ -16,7 +21,7 @@
                         <div class="order-total">
                             <p>
                                 应付总额：
-                                <span>10</span>元
+                                <span>{{payment}}</span>元
                             </p>
                             <p>
                                 订单详情
@@ -73,11 +78,26 @@
             </div>
         </div>
         <scan-pay-code v-if="showPay" @close="closePayModal" :img="payImg"></scan-pay-code>
+        <modal
+            title="支付确认"
+            btnType="3"
+            :showModal="showPayModal"
+            sureText="已支付"
+            cancelText="未支付"
+            @cancel="showPayModal=false"
+            @submit="goOrderList"
+        >
+            <template v-slot:body>
+                <p>您是否已完成支付？</p>
+            </template>
+        </modal>
     </div>
 </template>
 <script>
 import QRCode from "qrcode";
 import ScanPayCode from "../components/ScanPayCode";
+import Modal from "../components/Modal";
+import OrderHeader from "../components/OrderHeader";
 export default {
     data() {
         return {
@@ -87,11 +107,16 @@ export default {
             showDetail: false,
             payType: 0,
             showPay: false,
-            payImg: ''
+            payImg: "",
+            showPayModal: false,
+            payment: "",
+            T: "",
         };
     },
     components: {
         ScanPayCode,
+        Modal,
+        OrderHeader
     },
     mounted() {
         this.getOrderDetail();
@@ -102,6 +127,7 @@ export default {
                 let item = res.shippingVo;
                 this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
                 this.productList = res.orderItemVoList;
+                this.payment = res.payment;
             });
         },
         paySubmit(payType) {
@@ -121,18 +147,39 @@ export default {
                     .then((res) => {
                         QRCode.toDataURL(res.content)
                             .then((url) => {
-                                this.showPay=true;
-                                this.payImg=url;
+                                this.showPay = true;
+                                this.payImg = url;
+                                this.loopOrderState();
                             })
                             .catch(() => {
-                                this.$message.error("支付遇到问题，请稍后再试...");
+                                this.$message.error(
+                                    "支付遇到问题，请稍后再试..."
+                                );
                             });
+                    })
+                    .catch((_) => {
+                        this.$message.error("订单已支付，请勿重复支付。");
                     });
             }
         },
-        closePayModal(){
-            this.showPay=false;
-        }
+        closePayModal() {
+            this.showPay = false;
+            this.showPayModal = true;
+            clearInterval(this.T);
+        },
+        loopOrderState() {
+            this.T = setInterval(() => {
+                this.axios.get(`/orders/${this.orderId}`).then((res) => {
+                    if (res.status == 20) {
+                        clearInterval(this.T);
+                        this.goOrderList();
+                    }
+                });
+            }, 200);
+        },
+        goOrderList() {
+            this.$router.push("/order/list");
+        },
     },
 };
 </script>
