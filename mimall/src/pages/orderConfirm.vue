@@ -124,7 +124,55 @@
                 </div>
             </div>
         </div>
-        <modal title="删除确认" btnType="1" :showModal="showDelModal" @cancel="showDelModal=false" @submit="submitAddress">
+        <modal
+            title="添加收货地址"
+            btnType="1"
+            :showModal="showEditModal"
+            @cancel="showEditModal=false"
+            @submit="submitAddress"
+        >
+            <template v-slot:body>
+                <div class="edit-wrap">
+                    <div class="item">
+                        <input type="text" class="input" placeholder="姓名">
+                        <input type="text" class="input" placeholder="手机号">
+                    </div>
+                    <div class="item">
+                        <select name="province" id="">
+                            <option value="北京">北京</option>
+                            <option value="天津">天津</option>
+                            <option value="河北">河北</option>
+                        </select>
+                        <select name="city" id="">
+                            <option value="北京">北京</option>
+                            <option value="天津">天津</option>
+                            <option value="河北">石家庄</option>
+                        </select>
+                        <select name="district" id="">
+                            <option value="北京">昌平区</option>
+                            <option value="天津">海淀区</option>
+                            <option value="河北">东城区</option>
+                            <option value="天津">西城区</option>
+                            <option value="河北">顺义区</option>
+                            <option value="天津">房山区</option>
+                        </select>
+                    </div>
+                    <div class="item">
+                        <textarea name="street"></textarea>
+                    </div>
+                    <div class="item">
+                        <input type="text" class="input" placeholder="邮编">
+                    </div>
+                </div>
+            </template>
+        </modal>
+        <modal
+            title="删除确认"
+            btnType="1"
+            :showModal="showDelModal"
+            @cancel="showDelModal=false"
+            @submit="submitAddress"
+        >
             <template v-slot:body>
                 <p>您确认要删除此地址吗</p>
             </template>
@@ -132,7 +180,7 @@
     </div>
 </template>
 <script>
-import Modal from '../components/Modal'
+import Modal from "../components/Modal";
 export default {
     data() {
         return {
@@ -141,12 +189,13 @@ export default {
             cartTotalPrice: 0,
             count: 0,
             checkedItem: {},
-            userAction: '',
-            showDelModal: false
+            userAction: "",
+            showDelModal: false,
+            showEditModal: true
         };
     },
-    components:{
-        Modal
+    components: {
+        Modal,
     },
     mounted() {
         this.getAddressList();
@@ -158,34 +207,34 @@ export default {
                 this.list = res.list;
             });
         },
-        delAddress(item){
-            this.checkedItem=item;
-            this.userAction=2;
-            this.showDelModal=true;
+        delAddress(item) {
+            this.checkedItem = item;
+            this.userAction = 2;
+            this.showDelModal = true;
         },
-        submitAddress(){
-            let {checkedItem, userAction}=this;
+        submitAddress() {
+            let { checkedItem, userAction } = this;
             let method, url;
-            if(userAction==0){
-                method='post';
-                url='/shippings';
-            }else if(userAction==1){
-                method='put';
-                url=`/shippings/${checkedItem.id}`;
-            }else{
-                method='delete';
-                url=`/shippings/${checkedItem.id}`;
+            if (userAction == 0) {
+                method = "post";
+                url = "/shippings";
+            } else if (userAction == 1) {
+                method = "put";
+                url = `/shippings/${checkedItem.id}`;
+            } else {
+                method = "delete";
+                url = `/shippings/${checkedItem.id}`;
             }
-            this.axios[method](url).then(res => {
+            this.axios[method](url).then((res) => {
                 this.closeModal();
                 this.getAddressList();
                 this.$message.success("操作成功");
-            })
+            });
         },
-        closeModal(){
-            this.checkedItem={};
-            this.userAction='';
-            this.showDelModal=false;
+        closeModal() {
+            this.checkedItem = {};
+            this.userAction = "";
+            this.showDelModal = false;
         },
         getCartList() {
             this.axios.get("/carts").then((res) => {
@@ -354,6 +403,36 @@ export default {
             .btn-group {
                 margin-top: 37px;
                 text-align: right;
+            }
+        }
+    }
+    .edit-wrap{
+        font-size: 14px;
+        .item{
+            margin-bottom: 15px;
+            .input{
+                display: inline-block;
+                width: 283px;
+                height: 40px;
+                line-height: 40px;
+                padding-left: 15px;
+                border: 1px solid #E5E5E5;
+                &+.input{
+                    margin-left: 14px;
+                }
+            }
+            select{
+                height: 40px;
+                line-height: 40px;
+                margin-right: 15px;
+                border: 1px solid #E5E5E5;
+            }
+            textarea{
+                height: 62px;
+                width: 100%;
+                padding: 13px 15px;
+                box-sizing: border-box;
+                border: 1px solid #E5E5E5;
             }
         }
     }
