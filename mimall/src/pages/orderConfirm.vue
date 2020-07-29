@@ -48,7 +48,13 @@
                     <div class="item-address">
                         <h2 class="addr-title">收货地址</h2>
                         <div class="addr-list clearfix">
-                            <div class="addr-info" v-for="(item, index) in list" :key="index">
+                            <div
+                                class="addr-info"
+                                :class="{'checked':index==checkIndex}"
+                                @click="checkIndex=index"
+                                v-for="(item, index) in list"
+                                :key="index"
+                            >
                                 <h2>{{item.receiverName}}</h2>
                                 <div class="phone">{{item.receiverMobile}}</div>
                                 <div
@@ -60,7 +66,11 @@
                                             <use xlink:href="#icon-del" />
                                         </svg>
                                     </a>
-                                    <a href="javascript:;" class="fr">
+                                    <a
+                                        href="javascript:;"
+                                        class="fr"
+                                        @click="editAddressModal(item)"
+                                    >
                                         <svg class="icon icon-edit">
                                             <use xlink:href="#icon-edit" />
                                         </svg>
@@ -156,15 +166,15 @@
                         <select name="city" v-model="checkedItem.receiverCity">
                             <option value="北京">北京</option>
                             <option value="天津">天津</option>
-                            <option value="河北">石家庄</option>
+                            <option value="石家庄">石家庄</option>
                         </select>
                         <select name="district" v-model="checkedItem.receiverDistrict">
-                            <option value="北京">昌平区</option>
+                            <option value="昌平区">昌平区</option>
                             <option value="天津">海淀区</option>
-                            <option value="河北">东城区</option>
-                            <option value="天津">西城区</option>
-                            <option value="河北">顺义区</option>
-                            <option value="天津">房山区</option>
+                            <option value="海淀区">东城区</option>
+                            <option value="西城区">西城区</option>
+                            <option value="顺义区">顺义区</option>
+                            <option value="房山区">房山区</option>
                         </select>
                     </div>
                     <div class="item">
@@ -211,6 +221,7 @@ export default {
             userAction: "",
             showDelModal: false,
             showEditModal: false,
+            checkIndex: 0
         };
     },
     components: {
@@ -229,6 +240,11 @@ export default {
         openAddressModal() {
             this.userAction = 0;
             this.checkedItem = {};
+            this.showEditModal = true;
+        },
+        editAddressModal(item) {
+            this.userAction = 1;
+            this.checkedItem = item;
             this.showEditModal = true;
         },
         delAddress(item) {
