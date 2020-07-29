@@ -74,6 +74,9 @@
                             v-show="scrollLoading==true && loading==false"
                             alt
                         />
+                        <!-- 在122行已经禁用vue-infinite-scroll的情况下，这里已经不必再设置loading==false -->
+                        <!-- 之所以scrollLoading和loading会同时为true，是因为vue-infinite-scroll会在页面刚渲染时就触发一次 -->
+                        <!-- 所以才要在getOrderList里禁用vue-infinite-scroll，等首次数据渲染结束再启用vue-infinite-scroll -->
                     </div>
                     <no-data v-if="!loading && list.length==0"></no-data>
                     <div class="no-more" v-show="!hasNextPage">
@@ -110,7 +113,7 @@ export default {
             pageNum: 1,
             total: 0,
             busy: false,
-            hasNextPage: true
+            hasNextPage: true,
         };
     },
     mounted() {
@@ -118,7 +121,7 @@ export default {
     },
     methods: {
         getOrderList() {
-            this.busy=true;  //防止vue-infinite-scroll在页面刚渲染时就加载下一页
+            this.busy = true; //防止vue-infinite-scroll在页面刚渲染时就加载下一页
             this.axios
                 .get("/orders", {
                     params: {
@@ -130,7 +133,7 @@ export default {
                     this.loading = false;
                     this.list = res.list;
                     this.total = res.total;
-                    this.busy=false;  //在页面渲染完成后才使vue-infinite-scroll生效
+                    this.busy = false; //在页面渲染完成后才使vue-infinite-scroll生效
                 })
                 .catch((_) => {
                     this.loading = false;
@@ -171,7 +174,7 @@ export default {
                     if (res.hasNextPage) {
                         this.busy = false;
                     } else {
-                        this.hasNextPage=false;
+                        this.hasNextPage = false;
                         this.busy = true;
                     }
                 })
@@ -257,12 +260,12 @@ export default {
             .load-more,
             .scroll-more {
                 text-align: center;
-                img{
+                img {
                     height: 60px;
                     width: 97px;
                 }
             }
-            .no-more{
+            .no-more {
                 text-align: center;
                 color: #999999;
                 font-size: 18px;
