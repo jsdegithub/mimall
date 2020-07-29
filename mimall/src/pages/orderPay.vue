@@ -31,7 +31,7 @@
                     <div class="item-detail" v-if="showDetail">
                         <div class="item">
                             <div class="detail-title">订单号：</div>
-                            <div class="detail-info theme-color">{{orderNo}}</div>
+                            <div class="detail-info theme-color">{{orderId}}</div>
                         </div>
                         <div class="item">
                             <div class="detail-title">收货信息：</div>
@@ -58,40 +58,80 @@
                     <h3>选择以下支付方式付款</h3>
                     <div class="pay-way">
                         <p>支付平台</p>
-                        <div class="pay pay-ali" :class="{'checked':payType==1}" @click="paySubmit(1)"></div>
-                        <div class="pay pay-wechat" :class="{'checked':payType==2}" @click="paySubmit(2)"></div>
+                        <div
+                            class="pay pay-ali"
+                            :class="{'checked':payType==1}"
+                            @click="paySubmit(1)"
+                        ></div>
+                        <div
+                            class="pay pay-wechat"
+                            :class="{'checked':payType==2}"
+                            @click="paySubmit(2)"
+                        ></div>
                     </div>
                 </div>
             </div>
         </div>
+        <scan-pay-code v-if="showPay" @close="closePayModal" :img="payImg"></scan-pay-code>
     </div>
 </template>
 <script>
+import QRCode from "qrcode";
+import ScanPayCode from "../components/ScanPayCode";
 export default {
     data() {
         return {
-            orderNo: this.$route.query.orderNo,
+            orderId: this.$route.query.orderNo,
             addressInfo: "",
             productList: [],
             showDetail: false,
-            payType: 0
+            payType: 0,
+            showPay: false,
+            payImg: ''
         };
+    },
+    components: {
+        ScanPayCode,
     },
     mounted() {
         this.getOrderDetail();
     },
     methods: {
         getOrderDetail() {
-            this.axios.get(`/orders/${this.orderNo}`).then((res) => {
+            this.axios.get(`/orders/${this.orderId}`).then((res) => {
                 let item = res.shippingVo;
                 this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
                 this.productList = res.orderItemVoList;
             });
         },
-        paySubmit(payType){
-            if(payType==1){
-                window.open('/#/order/alipay?orderId='+this.orderNo, '_blank');
+        paySubmit(payType) {
+            if (payType == 1) {
+                window.open(
+                    "/#/order/alipay?orderId=" + this.orderId,
+                    "_blank"
+                );
+            } else {
+                this.axios
+                    .post("/pay", {
+                        orderId: this.orderId,
+                        orderName: "扫码支付",
+                        amount: 0.01,
+                        payType: 2,
+                    })
+                    .then((res) => {
+                        QRCode.toDataURL(res.content)
+                            .then((url) => {
+                                this.showPay=true;
+                                this.payImg=url;
+                            })
+                            .catch(() => {
+                                this.$message.error("支付遇到问题，请稍后再试...");
+                            });
+                    });
             }
+        },
+        closePayModal(){
+            this.showPay=false;
         }
     },
 };
