@@ -129,7 +129,7 @@
                     </div>
                     <div class="btn-group">
                         <a href="/#/cart" class="btn btn-default btn-large">返回购物车</a>
-                        <a href="javascript:;" class="btn btn-large">去结算</a>
+                        <a href="javascript:;" class="btn btn-large" @click="orderSubmit">去结算</a>
                     </div>
                 </div>
             </div>
@@ -336,6 +336,23 @@ export default {
                 });
             });
         },
+        orderSubmit(){
+            let item=this.list[this.checkIndex];
+            if(!item){
+                this.$message.error("请选择收货地址");
+                return;
+            }
+            this.axios.post('/orders', {
+                'shippingId': item.id
+            }).then(res => {
+                this.$router.push({
+                    path: '/order/pay',
+                    query: {
+                        orderNo: res.orderNo
+                    }
+                })
+            })
+        }
     },
 };
 </script>
