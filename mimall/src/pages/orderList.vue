@@ -55,6 +55,14 @@
                             </div>
                         </div>
                     </div>
+                    <el-pagination
+                        class="pagination"
+                        background
+                        layout="prev, pager, next"
+                        :pageSize="pageSize"
+                        :total="total"
+                        @current-change="handleChange"
+                    ></el-pagination>
                     <no-data v-if="!loading && list.length==0"></no-data>
                 </div>
             </div>
@@ -65,17 +73,22 @@
 import OrderHeader from "./../components/OrderHeader";
 import Loading from "./../components/Loading";
 import NoData from "./../components/NoData";
+import { Pagination } from "element-ui";
 export default {
     name: "order-list",
     components: {
         OrderHeader,
         Loading,
-        NoData
+        NoData,
+        [Pagination.name]: Pagination,
     },
     data() {
         return {
             list: [],
             loading: true,
+            pageSize: 5,
+            pageNum: 1,
+            total: 0,
         };
     },
     mounted() {
@@ -84,10 +97,16 @@ export default {
     methods: {
         getOrderList() {
             this.axios
-                .get("/orders")
+                .get("/orders", {
+                    params: {
+                        pageNum: this.pageNum,
+                        pageSize: this.pageSize
+                    }
+                })
                 .then((res) => {
                     this.loading = false;
                     this.list = res.list;
+                    this.total=res.total;
                 })
                 .catch((_) => {
                     this.loading = false;
@@ -102,6 +121,10 @@ export default {
                 },
             });
         },
+        handleChange(pageNum){
+            this.pageNum=pageNum;
+            this.getOrderList();
+        }
     },
 };
 </script>
@@ -168,7 +191,7 @@ export default {
                 }
             }
             .pagination {
-                text-align: right;
+                text-align: center;
             }
             .el-pagination.is-background .el-pager li:not(.disabled).active {
                 background-color: #ff6600;
