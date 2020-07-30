@@ -1,6 +1,6 @@
 <template>
     <div class="order-pay">
-        <order-header title="订单支付">
+        <order-header title="订单支付" toPullCartCount="1" @pullCartCount="pull_cart_count">
             <template v-slot:tip>
                 <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
             </template>
@@ -116,7 +116,7 @@ export default {
     components: {
         ScanPayCode,
         Modal,
-        OrderHeader
+        OrderHeader,
     },
     mounted() {
         this.getOrderDetail();
@@ -179,6 +179,11 @@ export default {
         },
         goOrderList() {
             this.$router.push("/order/list");
+        },
+        pull_cart_count() {
+            this.axios.get("/carts/products/sum").then((res) => {
+                this.$store.dispatch("saveCartCount", res);
+            });
         },
     },
 };

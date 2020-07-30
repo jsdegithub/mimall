@@ -1,6 +1,6 @@
 <template>
     <div class="cart">
-        <order-header title="我的购物车">
+        <order-header title="我的购物车" toPullCartCount="1" @pullCartCount="pull_cart_count">
             <template v-slot:tip>
                 <span>温馨提示：产品是否购买成功，以最终下单为准哦，请尽快结算</span>
             </template>
@@ -152,6 +152,11 @@ export default {
                 (item) => item.productSelected
             ).length;
         },
+        pull_cart_count(){
+            this.axios.get('/carts/products/sum').then(res => {
+                this.$store.dispatch("saveCartCount", res);
+            })
+        }
     },
 };
 </script>

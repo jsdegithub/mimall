@@ -1,6 +1,6 @@
 <template>
     <div class="order-list">
-        <order-header title="订单列表">
+        <order-header title="订单列表" toPullCartCount="1" @pullCartCount="pull_cart_count">
             <template v-slot:tip>
                 <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
             </template>
@@ -181,6 +181,11 @@ export default {
                 .catch((_) => {
                     this.$message.error("出错了，请稍后再试。");
                 });
+        },
+        pull_cart_count() {
+            this.axios.get("/carts/products/sum").then((res) => {
+                this.$store.dispatch("saveCartCount", res);
+            });
         },
     },
 };

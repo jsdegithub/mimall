@@ -1,7 +1,10 @@
 <template>
     <div class="order-header">
         <div class="container clearfix">
-            <div class="header-logo">
+            <div class="header-logo" @click="$emit('pullCartCount')" v-if="toPullCartCount=='1'">
+                <a href="/#/index"></a>
+            </div>
+            <div class="header-logo" v-else>
                 <a href="/#/index"></a>
             </div>
             <div class="title">
@@ -22,6 +25,7 @@ import {mapState} from 'vuex'
 export default {
     props: {
         title: String,
+        toPullCartCount: String
     },
     computed: {
         ...mapState(['username'])

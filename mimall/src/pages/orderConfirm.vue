@@ -1,6 +1,6 @@
 <template>
     <div class="order-confirm">
-        <order-header title="订单确认">
+        <order-header title="订单确认" toPullCartCount="1" @pullCartCount="pull_cart_count">
             <template v-slot:tip>
                 <span>请认真填写收货地址</span>
             </template>
@@ -227,12 +227,12 @@ export default {
             userAction: "",
             showDelModal: false,
             showEditModal: false,
-            checkIndex: 0
+            checkIndex: 0,
         };
     },
     components: {
         Modal,
-        OrderHeader
+        OrderHeader,
     },
     mounted() {
         this.getAddressList();
@@ -343,23 +343,30 @@ export default {
                 });
             });
         },
-        orderSubmit(){
-            let item=this.list[this.checkIndex];
-            if(!item){
+        orderSubmit() {
+            let item = this.list[this.checkIndex];
+            if (!item) {
                 this.$message.error("请选择收货地址");
                 return;
             }
-            this.axios.post('/orders', {
-                'shippingId': item.id
-            }).then(res => {
-                this.$router.push({
-                    path: '/order/pay',
-                    query: {
-                        orderNo: res.orderNo
-                    }
+            this.axios
+                .post("/orders", {
+                    shippingId: item.id,
                 })
-            })
-        }
+                .then((res) => {
+                    this.$router.push({
+                        path: "/order/pay",
+                        query: {
+                            orderNo: res.orderNo,
+                        },
+                    });
+                });
+        },
+        pull_cart_count() {
+            this.axios.get("/carts/products/sum").then((res) => {
+                this.$store.dispatch("saveCartCount", res);
+            });
+        },
     },
 };
 </script>
