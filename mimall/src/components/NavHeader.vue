@@ -163,8 +163,8 @@ export default {
         goToCart() {
             this.axios.get("/carts").catch((_) => {
                 this.$message.error("请先登录");
-                this.$router.push("/cart");
             });
+            this.$router.push("/cart");
         },
         login() {
             this.$router.push("/login");
