@@ -231,7 +231,7 @@ export default {
                 this.showModal=true;
                 this.$store.dispatch('saveCartCount', res.cartTotalQuantity);
             }).catch(()=>{
-                this.$message.error('未登录');
+                this.$message.error('请先登录');
             })
         },
         goToCart(){

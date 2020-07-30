@@ -161,7 +161,10 @@ export default {
                 });
         },
         goToCart() {
-            this.$router.push("/cart");
+            this.axios.get("/carts").catch((_) => {
+                this.$message.error("请先登录");
+                this.$router.push("/cart");
+            });
         },
         login() {
             this.$router.push("/login");
@@ -169,9 +172,9 @@ export default {
         logout() {
             this.axios.post("/user/logout").then(() => {
                 this.$message.success("退出成功");
-                this.$cookie.set('userId', '', {expires: '-1'});
-                this.$store.dispatch('saveUserName', '');
-                this.$store.dispatch('saveCartCount', 0);
+                this.$cookie.set("userId", "", { expires: "-1" });
+                this.$store.dispatch("saveUserName", "");
+                this.$store.dispatch("saveCartCount", 0);
             });
         },
     },
