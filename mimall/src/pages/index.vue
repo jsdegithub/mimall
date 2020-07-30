@@ -90,7 +90,15 @@
             </div>
         </div>
         <service-bar></service-bar>
-        <modal title="提示" sureText="查看购物车" btnType="1" modalType="middle" :showModal="showModal" @submit="goToCart" @cancel="showModal=false">
+        <modal
+            title="提示"
+            sureText="查看购物车"
+            btnType="1"
+            modalType="middle"
+            :showModal="showModal"
+            @submit="goToCart"
+            @cancel="showModal=false"
+        >
             <template v-slot:body>
                 <p>商品添加成功</p>
             </template>
@@ -107,7 +115,7 @@ export default {
         swiper,
         swiperSlide,
         ServiceBar,
-        Modal
+        Modal,
     },
     data() {
         return {
@@ -200,7 +208,8 @@ export default {
                 },
             ],
             phoneList: [],
-            showModal:false
+            showModal: false,
+            cartTotalCount: 0,
         };
     },
     mounted() {
@@ -223,20 +232,27 @@ export default {
                     ];
                 });
         },
-        addCart(id){
-            this.axios.post('/carts',{
-                productId: id,
-                selected: true
-            }).then((res)=>{
-                this.showModal=true;
-                this.$store.dispatch('saveCartCount', res.cartTotalQuantity);
-            }).catch(()=>{
-                this.$message.error('请先登录');
-            })
+        addCart(id) {
+            this.axios
+                .post("/carts", {
+                    productId: id,
+                    selected: true,
+                })
+                .then((res) => {
+                    this.showModal = true;
+                    let productList = res.cartProductVoList;
+                    productList.forEach((item) => {
+                        this.cartTotalCount += item.quantity;
+                    });
+                    this.$store.dispatch("saveCartCount", this.cartTotalCount);
+                })
+                .catch(() => {
+                    this.$message.error("请先登录");
+                });
         },
-        goToCart(){
-            this.$router.push('/cart');
-        }
+        goToCart() {
+            this.$router.push("/cart");
+        },
     },
 };
 </script>
