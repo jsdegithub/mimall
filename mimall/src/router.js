@@ -25,40 +25,40 @@ export default new Router({
                     component: Index,
                 }, {
                     path: '/product/:id',
-                    component: resolve => require(['./pages/product.vue'], resolve),
+                    component: Product,
                 }, {
                     path: '/detail/:id',
-                    component: resolve => require(['./pages/detail.vue'], resolve),
+                    component: Detail,
                 }
             ]
         },
         {
             path: '/login',
-            component: resolve => require(['./pages/login.vue'], resolve),
+            component: Login
         },
         {
             path: '/cart',
-            component: resolve => require(['./pages/cart.vue'], resolve),
+            component: Cart
         },
         {
             path: '/order',
-            component: resolve => require(['./pages/order.vue'], resolve),
+            component: Order,
             children: [
                 {
                     path: 'list',
-                    component: resolve => require(['./pages/orderList.vue'], resolve),
+                    component: OrderList,
                 },
                 {
                     path: 'confirm',
-                    component: resolve => require(['./pages/orderConfirm.vue'], resolve),
+                    component: OrderConfirm,
                 },
                 {
                     path: 'pay',
-                    component: resolve => require(['./pages/orderPay.vue'], resolve),
+                    component: OrderPay,
                 },
                 {
                     path: 'alipay',
-                    component: resolve => require(['./pages/alipay.vue'], resolve),
+                    component: AliPay,
                 }
             ]
         }
