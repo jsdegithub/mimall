@@ -25,40 +25,40 @@ export default new Router({
                     component: Index,
                 }, {
                     path: '/product/:id',
-                    component: resolve => require(['./pages/product.vue'], resolve),
+                    component: () => import('./pages/product.vue'),
                 }, {
                     path: '/detail/:id',
-                    component: resolve => require(['./pages/detail.vue'], resolve),
+                    component: () => import('./pages/detail.vue'),
                 }
             ]
         },
         {
             path: '/login',
-            component: resolve => require(['./pages/login.vue'], resolve),
+            component: () => import('./pages/login.vue'),
         },
         {
             path: '/cart',
-            component: resolve => require(['./pages/cart.vue'], resolve),
+            component: () => import('./pages/cart.vue'),
         },
         {
             path: '/order',
-            component: resolve => require(['./pages/order.vue'], resolve),
+            component: () => import('./pages/order.vue'),
             children: [
                 {
                     path: 'list',
-                    component: resolve => require(['./pages/orderList.vue'], resolve),
+                    component: () => import('./pages/orderList.vue'),
                 },
                 {
                     path: 'confirm',
-                    component: resolve => require(['./pages/orderConfirm.vue'], resolve),
+                    component: () => import('./pages/orderConfirm.vue'),
                 },
                 {
                     path: 'pay',
-                    component: resolve => require(['./pages/orderPay.vue'], resolve),
+                    component: () => import('./pages/orderPay.vue'),
                 },
                 {
                     path: 'alipay',
-                    component: resolve => require(['./pages/alipay.vue'], resolve),
+                    component: () => import('./pages/alipay.vue'),
                 }
             ]
         }
