@@ -16,6 +16,6 @@ module.exports={
     lintOnSave: false,
     outputDir: 'dist',
     indexPath: 'index.html',
-    publicPath: 'mimall',
+    // publicPath: 'mimall',
     productionSourceMap: false,
 }
