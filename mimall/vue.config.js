@@ -18,4 +18,7 @@ module.exports={
     indexPath: 'index.html',
     // publicPath: 'mimall',
     productionSourceMap: false,
+    chainWebpack: config => {
+        config.plugins.delete('prefetch');
+    }
 }
