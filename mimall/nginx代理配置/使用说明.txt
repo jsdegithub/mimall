@@ -7,7 +7,15 @@ etc/nginx/conf.d/default.conf
 mimall.conf所在目录：
 /etc/nginx/vhosts/mimall.conf (vhosts是自建目录)
 
-三个文件原封不动复制到相应目录下即可
+picga.conf所在目录：
+/etc/nginx/vhosts/picga.conf (vhosts是自建目录)
+
+legou.conf所在目录：
+/etc/nginx/vhosts/legou.conf (vhosts是自建目录)
+
+
+五个文件原封不动复制到相应目录下即可（子域名已解析）
 
 服务器操作系统是CentOS 6.9 64位
+
 
