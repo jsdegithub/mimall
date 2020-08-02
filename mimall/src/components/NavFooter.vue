@@ -9,13 +9,13 @@
             <span>|</span>
             <a href="https://github.com/jsdegithub">我的GitHub地址</a>
             <span>|</span>
-            <a href="http://www.aeeternity.com/picga/">Pictures Gallery</a>
+            <a href="http://picga.aeeternity.com">Pictures Gallery</a>
             <span>|</span>
-            <a href="http://www.aeeternity.com/legou/">Le Gou App</a>
+            <a href="http://legou.aeeternity.com">Le Gou App</a>
         </div>
         <div class="copyright">
             Copyright ©2020
-            <a href="javascript:;"><span class="domain">mi.futurefe.com</span></a> All Rights Reserved.
+            <a href="javascript:;"><span class="domain">mi.aeeternity.com</span></a> All Rights Reserved.
         </div>
     </div>
 </template>
