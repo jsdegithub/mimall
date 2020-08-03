@@ -7,11 +7,11 @@
         <div class="footer-link">
             <a href="javascript:;">JinShuo</a>
             <span>|</span>
-            <a href="https://github.com/jsdegithub">我的GitHub地址</a>
+            <a href="https://github.com/jsdegithub" target="_blank">我的GitHub地址</a>
             <span>|</span>
-            <a href="http://picga.aeeternity.com">Pictures Gallery</a>
+            <a href="http://picga.aeeternity.com" target="_blank">Pictures Gallery</a>
             <span>|</span>
-            <a href="http://legou.aeeternity.com">Le Gou App</a>
+            <a href="http://legou.aeeternity.com" target="_blank">Le Gou App</a>
         </div>
         <div class="copyright">
             Copyright ©2020
